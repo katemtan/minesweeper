@@ -1,0 +1,21 @@
+.game-tile {
+    display:inline-block;
+    border: 1px solid;
+    width: 2em;
+    height: 2em;
+    text-align:center;
+    min-width: 0 !important;
+    border-radius:0 !important;
+}
+.game-tile.revealed {
+    color:red !important;
+}
+.adj-1.revealed {
+    color: green !important;
+}
+.adj-2.revealed {
+    color: blue !important;
+}
+.board {
+    margin-top: 50px;
+}
