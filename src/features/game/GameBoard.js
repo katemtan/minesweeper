@@ -3,7 +3,6 @@ export default class GameBoard {
         this.board = [];
         this.height = height;
         this.width = width;
-        this.newGameBoard();
     }
 
     newGameBoard() {
@@ -11,7 +10,6 @@ export default class GameBoard {
         for (var i=0; i<this.height; i++) {
             board[i] = [];
             for (var j=0; j < this.width; j++) {
-                console.log('created tile');
                 board[i][j] = {
                     revealed: false,
                     flagged: false,
@@ -22,29 +20,21 @@ export default class GameBoard {
                 }
             }
         }
-        this.placeBombs(board);
-        this.setAdjacentBombs(board);
-        this.board = board;
         return board;
     }
 
-    placeBombs(board, bombs=40) {
+    placeBombs(board, bombs=40, initialRow=0, initialCol=0) {
         let bombsPlaced = 0;
         while (bombsPlaced < bombs) {
             const x = Math.floor(Math.random() * this.width);
             const y = Math.floor(Math.random() * this.height);
-            try {
-                if (!board[y][x].bomb) {
-                    board[y][x].bomb = true;
-                    // board[y][x] = 1;
-                    bombsPlaced++;
-                    console.log('bombsPlaced', bombsPlaced);
-                }
-            } catch (err) {
-                console.log('error', x, y);
+            if (!board[y][x].bomb && (y !== initialRow || x !== initialCol)) {
+                board[y][x].bomb = true;
+                bombsPlaced++;
             }
-
         }
+        this.setAdjacentBombs(board);
+        return board;
     }
 
     setAdjacentBombs(board) {
@@ -61,6 +51,7 @@ export default class GameBoard {
                 }
             }
         }
+        return board;
     }
 
     neighbours(board, row, col) {
@@ -84,22 +75,20 @@ export default class GameBoard {
         if (board[row][col].adjacentBombs === 0) {
             this.revealAdjacent(board, row, col);
         }
+        return board;
     }
 
     revealAdjacent(board, row, col) {
         const neighbours = this.neighbours(board, row, col);
-        neighbours.map(n => {
+        neighbours.forEach(n => {
             if(!n.flagged && !n.revealed && !n.bomb) {
                 n.revealed = true;
                 if (n.adjacentBombs === 0) {
-                    console.log('recursing???');
                     this.revealAdjacent(board, n.row, n.col);
                 }
-                else {
-                    console.log('not recursing', n);
-                }
             }
-        })
+        });
+        return board;
     }
 
     revealAll(board) {
@@ -108,5 +97,6 @@ export default class GameBoard {
                 board[i][j].revealed = true;
             }
         }
+        return board;
     }
 }

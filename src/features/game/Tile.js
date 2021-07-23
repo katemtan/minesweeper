@@ -17,6 +17,6 @@ export function Tile(props) {
         className={`game-tile adj-${adjacentBombs} ${revealed ? 'revealed' : 'hidden'}`}
         onClick={() => dispatch(revealTile(pos))}
         onContextMenu={(e) => {dispatch(flagTile(pos)); e.preventDefault();}}>
-            {flagged ? <span>🚩</span> : revealed ? content : ' '}
+            { revealed ? content : flagged ? <span>🚩</span> : ' '}
         </Button>
 }

@@ -2,8 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 import GameBoard from './GameBoard';
 
 const initialState = {
-  board: new GameBoard().board,
+  board: new GameBoard().newGameBoard(),
   gameOver: false,
+  flags: 0,
+  bombsPlaced: false,
 };
 
 export const gameSlice = createSlice({
@@ -12,44 +14,40 @@ export const gameSlice = createSlice({
   reducers: {
     newGame: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers.
-      console.log('new game being made', state);
-      const gb = new GameBoard().board;
+      const gb = new GameBoard().newGameBoard();
       state.board = gb;
       state.gameOver = false;
+      state.flags = 0;
+      state.bombsPlaced = false;
     },
     revealTile: (state, action) => {
-        console.log('action?', action);
-        console.log('dispatched reveal?', state);
         const { row, col } = action.payload;
+        let newBoard = state.board;
+        const gb = new GameBoard();
+        if (!state.bombsPlaced) {
+          state.board = gb.placeBombs(state.board, 40,  row, col);
+          state.bombsPlaced = true;
+        }
         if (state.board[row][col].bomb) {
             state.gameOver = true;
-            new GameBoard().revealAll(state.board);
+            newBoard = gb.revealAll(state.board);
         } else if (!state.board[row][col].revealed) {
-            new GameBoard().revealTile(state.board, row, col);
+            newBoard = gb.revealTile(state.board, row, col);
         }
-        // state.board[row][col].revealed = true;
-        // new GameBoard().revealAdjacent(state.board, row, col);
-        // state.board[action.payload.row][action.payload.col].revealed = true;
-        // state.board = newBoard;
-        state.board = state.board;
+        state.board = newBoard;
     },
     flagTile: (state, action) => {
-        console.log('dispatched flag?')
         state.board[action.payload.row][action.payload.col].flagged = true;
+        state.flags += 1;
     },
   },
 });
 
 export const { newGame, revealTile, flagTile } = gameSlice.actions;
 
-// The function below is called a selector and allows us to select a value from
-// the state. Selectors can also be defined inline where they're used instead of
-// in the slice file. For example: `useSelector((state: RootState) => state.counter.value)`
-export const selectGameBoard = (state) => {
-    console.log('state?', state);
-    return state.game.board
-};
-
+export const selectGameBoard = (state) => state.game.board;
 export const selectGameOver = (state) => state.game.gameOver;
+export const selectFlags = (state) => state.game.flags;
+
 
 export default gameSlice.reducer;
