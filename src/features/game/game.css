@@ -1,3 +1,6 @@
+.game-tiles {
+    margin: 1em 0;
+}
 .game-tile {
     display:inline-block;
     border: 1px solid;

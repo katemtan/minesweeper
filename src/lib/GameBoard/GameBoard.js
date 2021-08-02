@@ -99,4 +99,8 @@ export default class GameBoard {
         }
         return board;
     }
+
+    gameWon(board) {
+        return !(board.filter(row => row.filter(col => !col.revealed && !col.bomb).length).length);
+    }
 }
