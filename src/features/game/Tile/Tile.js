@@ -16,7 +16,9 @@ export function Tile(props) {
         variant={`${revealed ? 'outlined' : 'contained'}`}
         className={`game-tile adj-${adjacentBombs} ${revealed ? 'revealed' : 'hidden'}`}
         onClick={() => dispatch(revealTile(pos))}
-        onContextMenu={(e) => {dispatch(flagTile(pos)); e.preventDefault();}}>
+        onContextMenu={(e) => {dispatch(flagTile(pos)); e.preventDefault();}}
+        disabled={revealed}
+        >
             { revealed ? content : flagged ? <span className="flag">🚩</span> : ' '}
         </Button>
 }
