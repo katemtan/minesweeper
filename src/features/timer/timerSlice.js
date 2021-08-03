@@ -27,10 +27,7 @@ export const timerSlice = createSlice({
 });
 
 export const { startTimer, stopTimer, setTime } = timerSlice.actions;
-
 export const selectTimeStart = (state) => state.timer.timeStart;
 export const selectTimerRunning = (state) => state.timer.running;
 export const selectTime = (state) => state.timer.time;
-
-
 export default timerSlice.reducer;

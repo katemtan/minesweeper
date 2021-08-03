@@ -1,15 +1,9 @@
 export default class GameBoard {
-    constructor(height=16, width=16) {
-        this.board = [];
-        this.height = height;
-        this.width = width;
-    }
-
-    newGameBoard() {
+    newGameBoard(height=16, width=16) {
         const board = [];
-        for (var i=0; i<this.height; i++) {
+        for (var i=0; i<height; i++) {
             board[i] = [];
-            for (var j=0; j < this.width; j++) {
+            for (var j=0; j<width; j++) {
                 board[i][j] = {
                     revealed: false,
                     flagged: false,
@@ -26,8 +20,8 @@ export default class GameBoard {
     placeBombs(board, bombs=40, initialRow=0, initialCol=0) {
         let bombsPlaced = 0;
         while (bombsPlaced < bombs) {
-            const x = Math.floor(Math.random() * this.width);
-            const y = Math.floor(Math.random() * this.height);
+            const x = Math.floor(Math.random() * board[0].length);
+            const y = Math.floor(Math.random() * board.length);
             if (!board[y][x].bomb && (y !== initialRow || x !== initialCol)) {
                 board[y][x].bomb = true;
                 bombsPlaced++;
@@ -38,8 +32,8 @@ export default class GameBoard {
     }
 
     setAdjacentBombs(board) {
-        for (var i=0; i<this.height; i++) {
-            for (var j=0; j < this.width; j++) {
+        for (var i=0; i<board.length; i++) {
+            for (var j=0; j < board[i].length; j++) {
                 if (!board[i][j].bomb) {
                     const neighbours = this.neighbours(board, i, j);
                     board[i][j].adjacentBombs = neighbours.reduce((prev, n) => {
@@ -57,9 +51,9 @@ export default class GameBoard {
     neighbours(board, row, col) {
         const neighbours = [];
         const rowMin = Math.max(0, row - 1);
-        const rowMax = Math.min(this.height - 1, row + 1);
+        const rowMax = Math.min(board.length - 1, row + 1);
         const colMin = Math.max(0, col - 1);
-        const colMax = Math.min(this.width - 1, col + 1);
+        const colMax = Math.min(board[0].length - 1, col + 1);
         for(let i=rowMin; i <= rowMax; i++) {
             for(let j = colMin; j <= colMax; j++) {
                 if (i !== row || j !== col) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { flagTile, revealTile } from './gameSlice';
-import './game.css';
+import { flagTile, revealTile } from '../gameSlice';
+import '../game.css';
 import { Button } from '@material-ui/core';
 
 export function Tile(props) {
@@ -17,6 +17,6 @@ export function Tile(props) {
         className={`game-tile adj-${adjacentBombs} ${revealed ? 'revealed' : 'hidden'}`}
         onClick={() => dispatch(revealTile(pos))}
         onContextMenu={(e) => {dispatch(flagTile(pos)); e.preventDefault();}}>
-            { revealed ? content : flagged ? <span>🚩</span> : ' '}
+            { revealed ? content : flagged ? <span className="flag">🚩</span> : ' '}
         </Button>
 }

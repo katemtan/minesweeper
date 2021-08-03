@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Tile } from './Tile';
-import { selectGameBoard, newGame, selectGameState, selectFlags } from './gameSlice';
-import { startTimer, stopTimer, selectTime } from '../timer/timerSlice';
-import './game.css';
+import { Tile } from '../Tile/Tile';
+import { selectGameBoard, newGame, selectGameState, selectFlags } from '../gameSlice';
+import { startTimer, stopTimer, selectTime } from '../../timer/timerSlice';
+import '../game.css';
 import { Button } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import { startingBombs } from '../../../consts';
 
 export function Game(props) {
     const board = useSelector(selectGameBoard);
@@ -26,13 +27,13 @@ export function Game(props) {
         handleGameState();
     }, [gameState, dispatch])
     return <Typography component="div" className="board">
-        <div>{`${Math.max(0, 40 - flags)} Bombs Remaining`}</div>
+        <div>{`${Math.max(0, startingBombs - flags)} Bombs Remaining`}</div>
         <div className="game-tiles">
             {
-                board.map((row, i) => <div>
+                board.map((row, i) => <div key={`row-${i}`}>
                     {
                         row.map((col, j) => 
-                            <Tile row={i} col={j} {...col} />
+                            <Tile key={`tile-${i}-${j}`} row={i} col={j} {...col} />
                             )
                     }
                 </div>

@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { startingBombs, gameSize } from '../../consts';
 import GameBoard from '../../lib/GameBoard/GameBoard';
 
 const initialState = {
-  board: new GameBoard().newGameBoard(),
+  board: new GameBoard().newGameBoard(gameSize, gameSize),
   flags: 0,
   bombsPlaced: false,
   gameState: 'playing',
@@ -14,7 +15,7 @@ export const gameSlice = createSlice({
   reducers: {
     newGame: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers.
-      const gb = new GameBoard().newGameBoard();
+      const gb = new GameBoard().newGameBoard(gameSize, gameSize);
       state.board = gb;
       state.flags = 0;
       state.bombsPlaced = false;
@@ -26,7 +27,7 @@ export const gameSlice = createSlice({
         let newBoard = state.board;
         const gb = new GameBoard();
         if (!state.bombsPlaced) {
-          state.board = gb.placeBombs(state.board, 5,  row, col);
+          state.board = gb.placeBombs(state.board, startingBombs,  row, col);
           state.bombsPlaced = true;
         }
         if (state.board[row][col].bomb) {
@@ -50,10 +51,7 @@ export const gameSlice = createSlice({
 });
 
 export const { newGame, revealTile, flagTile } = gameSlice.actions;
-
 export const selectGameBoard = (state) => state.game.board;
 export const selectGameState = (state) => state.game.gameState;
 export const selectFlags = (state) => state.game.flags;
-
-
 export default gameSlice.reducer;

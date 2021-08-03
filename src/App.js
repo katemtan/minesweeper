@@ -1,5 +1,5 @@
 import React from 'react';
-import { Game } from './features/game/Game';
+import { Game } from './features/game/Game/Game';
 import './App.css';
 import { Timer } from './features/timer/Timer';
 
